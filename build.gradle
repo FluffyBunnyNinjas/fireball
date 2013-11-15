@@ -4,14 +4,14 @@ apply plugin: "eclipse"
 ext.awsSDKVersion = "1.6.4"
 
 repositories {
-	// Central maven repository
-	mavenCentral()
+    // Central maven repository
+    mavenCentral()
 }
 
 dependencies {
-			// AWS SDK, we need the interfaces and stuff
-	compile "com.amazonaws:aws-java-sdk:${awsSDKVersion}",
-
-			// Guava, because it's so fucking useful
-			"com.google.guava:guava:15.0"
+            // AWS SDK, we need the interfaces and stuff
+    compile "com.amazonaws:aws-java-sdk:${awsSDKVersion}",
+            files("libs/sqlite4java.jar", "libs/DynamoDBLocal-repack.jar")
+            // JUnit 4
+    testCompile "junit:junit:4.11"
 }
