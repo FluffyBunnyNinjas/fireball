@@ -1,4 +1,4 @@
-package org.fluffybunnyninjas.magneto;
+package org.fluffybunnyninjas.fireball;
 
 import org.junit.Test;
 
