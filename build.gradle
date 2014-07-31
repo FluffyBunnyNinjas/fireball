@@ -1,7 +1,7 @@
 apply plugin: "java"
 apply plugin: "eclipse"
 
-ext.awsSDKVersion = "1.6.4"
+ext.awsSDKVersion = "1.8.6"
 
 repositories {
     // Central maven repository
@@ -11,12 +11,12 @@ repositories {
 dependencies {
             // AWS SDK, we need the interfaces and stuff
     compile "com.amazonaws:aws-java-sdk:${awsSDKVersion}",
-            files("libs/sqlite4java.jar", "libs/DynamoDBLocal-repack.jar")
+            files("libs/sqlite4java.jar", "libs/DynamoDBLocal-repack-2014-04-24.jar")
             // JUnit 4
     testCompile "junit:junit:4.11"
 }
 
 jar {
-    FileTree zip = zipTree("libs/DynamoDBLocal-repack.jar")
+    FileTree zip = zipTree("libs/DynamoDBLocal-repack-2014-04-24.jar")
     from zip
 }
