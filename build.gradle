@@ -20,3 +20,7 @@ jar {
     FileTree zip = zipTree("libs/DynamoDBLocal-repack-2014-04-24.jar")
     from zip
 }
+
+task wrapper(type: Wrapper) {
+    gradleVersion = "2.2"
+}
