@@ -1,7 +1,6 @@
 apply plugin: "java"
-apply plugin: "eclipse"
 
-ext.awsSDKVersion = "1.8.6"
+ext.awsSDKVersion = "1.9.17"
 
 repositories {
     // Central maven repository
@@ -10,7 +9,7 @@ repositories {
 
 dependencies {
             // AWS SDK, we need the interfaces and stuff
-    compile "com.amazonaws:aws-java-sdk:${awsSDKVersion}",
+    compile "com.amazonaws:aws-java-sdk-dynamodb:${awsSDKVersion}",
             files("libs/sqlite4java.jar", "libs/DynamoDBLocal-repack-2014-04-24.jar")
             // JUnit 4
     testCompile "junit:junit:4.11"
