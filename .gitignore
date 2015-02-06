@@ -7,3 +7,7 @@
 .project
 .settings
 .classpath
+
+# IDEA stuff
+*.iml
+.idea
