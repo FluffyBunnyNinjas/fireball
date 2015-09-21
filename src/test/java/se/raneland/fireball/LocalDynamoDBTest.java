@@ -1,4 +1,4 @@
-package org.fluffybunnyninjas.fireball;
+package se.raneland.fireball;
 
 import org.junit.Test;
 
