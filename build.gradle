@@ -1,6 +1,6 @@
 apply plugin: "java"
 
-ext.awsSDKVersion = "1.9.17"
+ext.awsSDKVersion = "1.10.+"
 
 repositories {
     // Central maven repository
