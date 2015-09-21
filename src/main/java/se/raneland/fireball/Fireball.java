@@ -1,4 +1,4 @@
-package org.fluffybunnyninjas.fireball;
+package se.raneland.fireball;
 
 import com.amazonaws.regions.Region;
 import com.amazonaws.services.dynamodbv2.local.shared.access.LocalDBClient;
