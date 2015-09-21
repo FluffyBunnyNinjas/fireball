@@ -10,8 +10,11 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.lang.reflect.Field;
 import java.math.BigInteger;
+import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.SimpleFileVisitor;
+import java.nio.file.attribute.BasicFileAttributes;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
@@ -29,11 +32,36 @@ public class Fireball extends LocalDBClient {
 			"libsqlite4java-osx-1.0.392.dylib",
 			"libsqlite4java-linux-amd64-1.0.392.so"));
 
-
 	static {
 		try {
 			// Unpack native libraries
 			final Path nativesDir = Files.createTempDirectory("fireball");
+			Runtime.getRuntime().addShutdownHook(new Thread() {
+				@Override
+				public void run() {
+					try {
+						Files.walkFileTree(nativesDir, new SimpleFileVisitor<Path>() {
+							@Override
+							public FileVisitResult visitFile(final Path file, final BasicFileAttributes attrs)
+									throws IOException {
+								log.debug("Removing {}", file);
+								Files.deleteIfExists(file);
+								return FileVisitResult.CONTINUE;
+							}
+
+							@Override
+							public FileVisitResult postVisitDirectory(final Path dir, final IOException exc)
+									throws IOException {
+								log.debug("Removing {}", dir);
+								Files.deleteIfExists(dir);
+								return FileVisitResult.CONTINUE;
+							}
+						});
+					} catch (IOException e) {
+						log.error("Could not remove {}; please remove it manually: {}", nativesDir, e.getMessage(), e);
+					}
+				}
+			});
 			for(String lib : NATIVE_LIBRARIES) {
 				final Path libFile = nativesDir.resolve(lib);
 				try(InputStream libStream = Fireball.class.getResourceAsStream("/natives/" + lib);
