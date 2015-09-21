@@ -14,10 +14,17 @@ group = "se.raneland.fireball"
 version = ["git", "describe", "--dirty"].execute().in.text.trim() ?: "unknown"
 
 apply plugin: "java"
+apply plugin: "groovy"
 apply plugin: "maven-publish"
 apply plugin: "com.jfrog.bintray"
 
-ext.awsSDKVersion = "1.10.+"
+ext {
+    v =  [
+        aws: "1.10.+",
+        sqlite: "1.0.392",
+        slf4j: "1.7.12",
+    ]
+}
 
 repositories {
     // Central maven repository
@@ -26,11 +33,34 @@ repositories {
 
 dependencies {
             // AWS SDK, we need the interfaces and stuff
-    compile "com.amazonaws:aws-java-sdk-dynamodb:${awsSDKVersion}",
-            files("libs/sqlite4java.jar", "libs/DynamoDBLocal-repack-2014-04-24.jar")
+    compile "com.amazonaws:aws-java-sdk-dynamodb:${v.aws}",
+
+            // Sqlite 4 Java
+            "com.almworks.sqlite4java:sqlite4java:${v.sqlite}",
+            "com.almworks.sqlite4java:sqlite4java-win32-x64:${v.sqlite}",
+            "com.almworks.sqlite4java:libsqlite4java-osx:${v.sqlite}",
+            "com.almworks.sqlite4java:libsqlite4java-linux-amd64:${v.sqlite}",
+
+            // Slf4j Bridge for Log4j
+            "org.slf4j:log4j-over-slf4j:${v.slf4j}",
+
+            // Repackaged DynamoDBLocal
+            files("libs/DynamoDBLocal-repack-2014-04-24.jar")
+
             // JUnit 4
     testCompile "junit:junit:4.11"
 }
+
+task copyNatives(type: Copy) {
+    from(project.configurations.compile.findAll({
+        it.name.startsWith("libsqlite4java") || it.name.startsWith("sqlite4java-win32")
+    })) {
+        rename { name -> new File(name).name }
+    }
+    into "build/resources/main/natives"
+}
+
+tasks.processResources.dependsOn copyNatives
 
 jar {
     FileTree zip = zipTree("libs/DynamoDBLocal-repack-2014-04-24.jar")
